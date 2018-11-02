@@ -3,7 +3,11 @@ app = Flask(__name__)
 app.secret_key ="Thisissecret"
 @app.route('/')
 def index():
-	session['counter'] +=1 
+	try:
+		session['counter'] +=1 
+	except KeyError as e:
+		print(e)
+		session['counter'] = 1
 	return render_template("index.html", counter=session['counter'])
 
 @app.route('/plustwo', methods=["POST"] )
@@ -14,7 +18,7 @@ def plustwo():
 
 @app.route('/reset', methods=['POST'])
 def reset():
-	session['counter'] = 0
+	session.clear()
 
 
 	return redirect('/')
